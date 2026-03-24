@@ -1,6 +1,7 @@
 import discord, os, asyncio, yt_dlp
 from dotenv import load_dotenv
 from discord.ext import commands
+from urllib.parse import urlparse
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
@@ -8,17 +9,36 @@ TOKEN = os.getenv("TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=intents)
+queue = {}
 
 YT_OPTS = {
     'format':'bestaudio',
-    'nonplaylist':True, 
-    'default_search':'ytsearch'
+    'nonplaylist':False, 
+    'default_search':'ytsearch',
+    'extract_info':True,
+    'quiet': True
 }
 
 FFMPEG_OPTIONS = {
     'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
     'options': '-vn'
 }
+
+def prepare_query(user_input):
+    if 'entries' in user_input:
+        return user_input['entries'][0]
+    return user_input
+
+def player(ctx):
+
+    if ctx.guild.id in queue and len(queue[ctx.guild.id]) > 0:
+        video_data = queue[ctx.guild.id].pop(0)
+        source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)
+        ctx.voice_client.play(source, after=lambda e: player(ctx))
+        bot.loop.create_task(ctx.send(f"Now playing: **{video_data['title']}**"))
+
+    else:
+        bot.loop.create_task(ctx.send("Playlist finished!"))
 
 @bot.event
 async def on_ready() -> None:
@@ -42,29 +62,39 @@ async def play(ctx, *,search:str):
 
     if vc.is_playing():
         vc.stop()
-        ctx.send(f"Switching...")
+        await ctx.send(f"Switching...")
 
     async with ctx.typing():
         with yt_dlp.YoutubeDL(YT_OPTS) as ydl:
             info = ydl.extract_info(search, download=False)
+            extractor = info.get('extractor_key') == 'YoutubeSearch'
+
+            if ctx.guild.id not in queue:
+                    queue[ctx.guild.id] = []
             
             if 'entries' in info:
-                video_data = info['entries'][0]
-            else:
-                video_data = info
+                if extractor:
+                    video_data = info['entries'][0]
+                    queue[ctx.guild.id].append(video_data)
+                    await ctx.send(f"Added search result: **{video_data['title']}**")
+                    
+                else:
+                    for entry in info['entries']:
+                        queue[ctx.guild.id].append(entry)
+                    await ctx.send(f"**{len(info['entries'])}** Songs are Added in Queue")
 
-            audio_url = video_data['url'] 
-            title = video_data['title']
-            source = discord.FFmpegPCMAudio(audio_url, **FFMPEG_OPTIONS)
-            
-            ctx.voice_client.play(source)
-            await ctx.send(f"Now playing: **{title}**")
+            else:
+                queue[ctx.guild.id].append(info)
+                await ctx.send(f"Added: **{info['title']}**")
+                
+    if not vc.is_playing() and not vc.is_paused():
+        player(ctx)
 
 @bot.command()
 async def pause(ctx):
     if ctx.voice_client and ctx.voice_client.is_playing():
         ctx.voice_client.pause()
-        await ctx.send("⏸️ Music paused.")
+        await ctx.send("Music paused.")
     else:
         await ctx.send("Nothing is playing right now.")
 
