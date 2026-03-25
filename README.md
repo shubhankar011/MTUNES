@@ -60,6 +60,7 @@ python main.py
 | `!pause` | Pauses current song | `!pause` |
 | `!resume` | Resumes paused song | `!resume` |
 | `!stop` | Stops the music | `!stop` |
+| `!skip` | Skips the music in queue | `!skip` |
 | `!leave` | Bot leaves voice channel | `!leave` |
 | `!ping` | Shows bot latency | `!ping` |
 
@@ -91,10 +92,16 @@ Install FFmpeg separately:
 - **Linux**: `sudo apt install ffmpeg`
 - **macOS**: `brew install ffmpeg`
 
+## Updates
+### 25-03-2026
+- Added Skip command(!skip) for playlist
+- Fixed bugs of stopping songs
+- Future proofed the searching yt-dlp
+
 ## Future plans
 
 - Adding a chatbot that responds when mentioned
-- More music controls (skip, shuffle, loop)
+- More music controls (shuffle, loop)
 - Better queue management
 - Volume control
 
