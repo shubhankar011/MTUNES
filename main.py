@@ -79,7 +79,7 @@ async def play(ctx, *,search:str):
     async with ctx.typing():
         with yt_dlp.YoutubeDL(YT_OPTS) as ydl:
             info = ydl.extract_info(search, download=False)
-            extractor = info.get('extractor_key') == 'YoutubeSearch'
+            extractor = 'search' in info.get('extractor_key','').lower()
 
             if ctx.guild.id not in queue:
                     queue[ctx.guild.id] = []
