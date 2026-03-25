@@ -11,12 +11,24 @@ intents.message_content = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=intents)
 queue = {}
 
+class Logger:
+    def debug(self, msg):
+        print(f"[DEBUGGING] {msg}")
+    
+    def warning(self, msg):
+        print(f"[WARNING] {msg}")
+    
+    def error(self, msg):
+        print(f"[ERROR] {msg}")
+
+
 YT_OPTS = {
     'format':'bestaudio',
     'nonplaylist':False, 
     'default_search':'ytsearch',
     'extract_info':True,
-    'quiet': True
+    'quiet': True,
+    'logger': Logger()
 }
 
 FFMPEG_OPTIONS = {
@@ -77,7 +89,7 @@ async def play(ctx, *,search:str):
                     video_data = info['entries'][0]
                     queue[ctx.guild.id].append(video_data)
                     await ctx.send(f"Added search result: **{video_data['title']}**")
-                    
+
                 else:
                     for entry in info['entries']:
                         queue[ctx.guild.id].append(entry)
