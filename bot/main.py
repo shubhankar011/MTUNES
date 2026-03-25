@@ -148,7 +148,6 @@ async def stop(ctx):
     else:
         await ctx.send("Nothing is playing right now.")
         
-
 @bot.command()
 async def leave(ctx):
     if ctx.voice_client: 
