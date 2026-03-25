@@ -119,14 +119,26 @@ async def resume(ctx):
         await ctx.send("The music isn't paused.")
 
 @bot.command()
-async def stop(ctx):
-    if ctx.voice_client:
+async def skip(ctx):
+    if ctx.voice_client and ctx.voice_client.is_playing():
         ctx.voice_client.stop()
-        await ctx.send("Music stopped.")
+        await ctx.send("Skipping...")
+
+    else:
+        await ctx.send("Nothing to skip!")
+
+async def stop(ctx):
+    if ctx.guild.id in queue:
+        queue[ctx.guild.id].clear()
+    
+    if ctx.voice_client and ctx.voice_client.is_playing():
+        ctx.voice_client.stop()
+        await ctx.send("Music Stopped!!!")
+        
 
 @bot.command()
 async def leave(ctx):
-    if ctx.voice_client:
+    if ctx.voice_client: 
         await ctx.voice_client.disconnect()
         await ctx.send("Bye-bye!")
 
