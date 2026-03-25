@@ -148,7 +148,7 @@ async def stop(ctx):
     else:
         await ctx.send("Nothing is playing right now.")
         
-        
+
 @bot.command()
 async def leave(ctx):
     if ctx.voice_client: 
@@ -163,4 +163,7 @@ async def ping(ctx: commands.Context) -> None:
 # async def help(ctx):
 #     await ctx.send("!Hello!hello, !hi, !holaThe bot greets you by name.\n!pingNoneShows the bot's heartbeat latency (speed).\n!play <text> Joins your VC and plays a song via search or link.!play No CapMusic \n!pause Temporarily stops the current song.\n!resume Starts the music again from where it paused. \n!stop Stops the music completely.\n!leave Force the bot to disconnect from the voice channel. \n!help for the commands")
 
-bot.run(TOKEN)  
+try:
+    bot.run(TOKEN)
+except KeyboardInterrupt:
+    print("Stopping bot safely...") 
