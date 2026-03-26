@@ -2,7 +2,9 @@ const express = require('express')
 // const fs = require('fs')
 const axios = require('axios')
 const cors = require('cors')
-require('dotenv').config({ path:'../.env'})
+path = require('path')
+
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const app = express()
 
@@ -10,8 +12,8 @@ app.use(cors({
     origin: ['http://localhost:5173', 'https://mtunesbot.vercel.app']
 }))
 
-app.get('/', (re,res) =>{
-    res.send("MTUNES bride is online!")
+app.get('/', (req,res) =>{
+    res.send("MTUNES bridge is online!")
 })
 
 app.get('/api/callback', async(req,res) => {
