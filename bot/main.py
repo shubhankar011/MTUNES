@@ -2,8 +2,10 @@ import discord, os, asyncio, yt_dlp
 from dotenv import load_dotenv
 from discord.ext import commands
 from urllib.parse import urlparse
+from flask import Flask, request
+import threading
 
-load_dotenv()
+load_dotenv(dotenv_path="../.env")
 TOKEN = os.getenv("TOKEN")
 
 intents = discord.Intents.default()
@@ -162,7 +164,41 @@ async def ping(ctx: commands.Context) -> None:
 # async def help(ctx):
 #     await ctx.send("!Hello!hello, !hi, !holaThe bot greets you by name.\n!pingNoneShows the bot's heartbeat latency (speed).\n!play <text> Joins your VC and plays a song via search or link.!play No CapMusic \n!pause Temporarily stops the current song.\n!resume Starts the music again from where it paused. \n!stop Stops the music completely.\n!leave Force the bot to disconnect from the voice channel. \n!help for the commands")
 
-try:
-    bot.run(TOKEN)
-except KeyboardInterrupt:
-    print("Stopping bot safely...") 
+app = Flask(__name__)
+@app.get('/status')
+def getStatus():
+    return {"status":"online", "server": len(bot.guilds)}
+
+def runFlask():
+    app.run(host='0.0.0.0', port=5000)
+
+@app.post('/api/play-remote')
+def remote_play():
+    data = request.json
+    guild_id = int(data.get('guild_id'))
+    search_query = data.get('query')
+    
+    guild = bot.get_guild(guild_id)
+    if not guild:
+        return {"error": "Bot is not in this server"}, 404
+
+    vc = guild.voice_client
+    if not vc:
+        return {"error": "Bot is not in a voice channel"}, 400
+
+    asyncio.run_coroutine_threadsafe(
+        trigger_remote_audio(guild, search_query), 
+        bot.loop
+    )
+
+    return {"status": "Success", "message": f"Queuing {search_query}"}
+
+async def trigger_remote_audio(guild, query):
+    print(f"Remote request for {query} in {guild.name}")
+
+if __name__ == '__main__':
+    threading.Thread(target=runFlask, daemon=True).start()
+    try:
+        bot.run(TOKEN)
+    except KeyboardInterrupt:
+        print("Stopping bot safely...") 

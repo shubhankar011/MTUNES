@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import mtunesLogo from './assets/mtunes.png'
 import { Modal } from './Modal'
 import './App.css'
@@ -20,6 +20,22 @@ function App() {
     const discordLink = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(address)}&response_type=code&scope=${encodeURIComponent(SCOPES)}`;
     window.location.href = discordLink;
   };
+
+  useEffect(() => {
+    const urlNames = new URLSearchParams(window.location.search)
+    const code = urlNames.get('code');
+    if(code){
+      const API_URL = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001' 
+      : 'https://your-live-backend-url.com';
+
+      fetch(`${API_URL}/api/callback?code=${code}`)
+      .then(res => res.json())
+      .then(data => {
+          console.log("Logged in!", data);
+      })
+    }
+  }, [])
 
   return (
     <>
