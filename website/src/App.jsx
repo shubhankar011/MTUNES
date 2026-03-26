@@ -25,11 +25,7 @@ function App() {
     const urlNames = new URLSearchParams(window.location.search)
     const code = urlNames.get('code');
     if(code){
-      const API_URL = window.location.hostname === 'localhost' 
-      ? 'http://localhost:3001' 
-      : 'https://mtunes.onrender.com/';
-
-      fetch(`http://localhost:3001/api/callback?code=${code}`)
+      fetch(`https://mtunes.onrender.com/api/callback?code=${code}`)
       .then(res => res.json())
       .then(data => {
           console.log("Logged in!", data);
