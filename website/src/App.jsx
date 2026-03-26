@@ -26,7 +26,7 @@ function App() {
     const code = urlNames.get('code');
     if(code){
       window.history.replaceState({}, document.title, "/");
-      fetch(`https://mtunes.onrender.com/api/callback?code=${code}`)
+      fetch(`https://mtunes-production.up.railway.app/api/callback?code=${code}`)
       .then(res => res.json())
       .then(data => {
           console.log("Logged in!", data);
