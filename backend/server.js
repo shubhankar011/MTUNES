@@ -10,6 +10,9 @@ app.use(cors({
     origin: ['http://localhost:5173', 'https://mtunesbot.vercel.app']
 }))
 
+app.get('/', (re,res) =>{
+    res.send("MTUNES bride is online!")
+})
 
 app.get('/api/callback', async(req,res) => {
 
