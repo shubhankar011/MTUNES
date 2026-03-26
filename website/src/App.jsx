@@ -16,7 +16,7 @@ function App() {
   const [Open, setOpen] = useState(false)
 
   const login = () => {
-    const address = window.location.origin + '/auth/callback';
+    const address = window.location.origin;
     const discordLink = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(address)}&response_type=code&scope=${encodeURIComponent(SCOPES)}`;
     window.location.href = discordLink;
   };
@@ -27,9 +27,9 @@ function App() {
     if(code){
       const API_URL = window.location.hostname === 'localhost' 
       ? 'http://localhost:3001' 
-      : 'https://your-live-backend-url.com';
+      : 'https://mtunes.onrender.com/';
 
-      fetch(`${API_URL}/api/callback?code=${code}`)
+      fetch(`http://localhost:3001/api/callback?code=${code}`)
       .then(res => res.json())
       .then(data => {
           console.log("Logged in!", data);
