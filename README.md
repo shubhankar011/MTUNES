@@ -254,7 +254,7 @@ This is free software released into the public domain. Check the LICENSE file fo
 
 **Made for playing music with friends**
 
-Version 1.0.0 | Last updated: 2024
+Version 1.0.0 | Last updated: 27-03-2026
 
 </div>
 <!-- 
