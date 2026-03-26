@@ -25,6 +25,7 @@ function App() {
     const urlNames = new URLSearchParams(window.location.search)
     const code = urlNames.get('code');
     if(code){
+      window.history.replaceState({}, document.title, "/");
       fetch(`https://mtunes.onrender.com/api/callback?code=${code}`)
       .then(res => res.json())
       .then(data => {
