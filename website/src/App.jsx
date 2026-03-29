@@ -69,7 +69,11 @@ function App() {
             >
               <div className="space-y-4">
                 <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!play [song]</code>
+                  <code className="text-indigo-400">!play [song]/!play</code>
+                  <span className="text-slate-400">Plays the song in queue</span>
+                </div>
+                <div className="flex justify-between border-b border-slate-800 pb-2">
+                  <code className="text-indigo-400">!add [song]</code>
                   <span className="text-slate-400">Add song to queue</span>
                 </div>
                 <div className="flex justify-between border-b border-slate-800 pb-2">

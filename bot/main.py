@@ -64,7 +64,7 @@ async def hello(ctx) -> None:
     await ctx.send(f'Hi {ctx.author.mention}')
 
 @bot.command()
-async def play(ctx, *,search:str):
+async def play(ctx, *,search:str=''):
     if not ctx.author.voice:
         return await ctx.send("You are not in a voice channel!")
     
@@ -79,27 +79,30 @@ async def play(ctx, *,search:str):
         await ctx.send(f"Switching...")
 
     async with ctx.typing():
-        with yt_dlp.YoutubeDL(YT_OPTS) as ydl:
-            info = ydl.extract_info(search, download=False)
-            extractor = 'search' in info.get('extractor_key','').lower()
+        if search == '':
+            player(ctx)
+        else:
+            with yt_dlp.YoutubeDL(YT_OPTS) as ydl:
+                info = ydl.extract_info(search, download=False)
+                extractor = 'search' in info.get('extractor_key','').lower()
 
-            if ctx.guild.id not in qu:
-                    qu[ctx.guild.id] = []
-            
-            if 'entries' in info:
-                if extractor:
-                    video_data = info['entries'][0]
-                    qu[ctx.guild.id].append(video_data)
-                    await ctx.send(f"Added search result: **{video_data['title']}**")
+                if ctx.guild.id not in qu:
+                        qu[ctx.guild.id] = []
+                
+                if 'entries' in info:
+                    if extractor:
+                        video_data = info['entries'][0]
+                        qu[ctx.guild.id].append(video_data)
+                        await ctx.send(f"Added search result: **{video_data['title']}**")
+
+                    else:
+                        for entry in info['entries']:
+                            qu[ctx.guild.id].append(entry)
+                        await ctx.send(f"**{len(info['entries'])}** Songs are Added in Queue")
 
                 else:
-                    for entry in info['entries']:
-                        qu[ctx.guild.id].append(entry)
-                    await ctx.send(f"**{len(info['entries'])}** Songs are Added in Queue")
-
-            else:
-                qu[ctx.guild.id].append(info)
-                await ctx.send(f"Added: **{info['title']}**")
+                    qu[ctx.guild.id].append(info)
+                    await ctx.send(f"Added: **{info['title']}**")
                 
     if not vc.is_playing() and not vc.is_paused():
         player(ctx)
@@ -122,6 +125,33 @@ async def queue(ctx):
     else:
         await ctx.send("> No queue has been started for this server yet.")
 
+@bot.command()
+async def add(ctx,*,search:str):
+    channel = ctx.author.voice.channel
+    if ctx.voice_client is None:
+        vc = await channel.connect()
+    if ctx.voice_client:
+        if ctx.guild.id not in qu:
+             qu[ctx.guild.id] = []
+
+        async with ctx.typing():
+            with yt_dlp.YoutubeDL(YT_OPTS) as ydl:
+                info = ydl.extract_info(search, download=False)
+                extractor = 'search' in info.get('extractor_key','').lower()
+                if 'entries' in info:
+                    if extractor:
+                        video_data = info['entries'][0]
+                        qu[ctx.guild.id].append(video_data)
+                        await ctx.send(f"Added search result: **{video_data['title']}** to the queue")
+
+                    else:
+                        for entry in info['entries']:
+                            qu[ctx.guild.id].append(entry)
+                        await ctx.send(f"**{len(info['entries'])}** Songs are Added in Queue to the queue")
+
+                else:
+                    qu[ctx.guild.id].append(info)
+                    await ctx.send(f"Added: **{info['title']}** to the queue")
 @bot.command()
 async def resume(ctx):
     if ctx.voice_client and ctx.voice_client.is_paused():
