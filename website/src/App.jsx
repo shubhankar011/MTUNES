@@ -20,10 +20,26 @@ function App() {
     const discordLink = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(address)}&response_type=code&scope=${encodeURIComponent(SCOPES)}`;
     window.location.href = discordLink;
   };
+  const CommandRow = ({ trigger, desc, delay }) => {
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+      const timer = setTimeout(() => setShow(true), delay);
+      return () => clearTimeout(timer);
+    }, [delay]);
+
+    return (
+      <div className={`flex justify-between border-b border-slate-800 pb-2 command-card ${show ? 'show' : ''}`}>
+        <code className="text-indigo-400">{trigger}</code>
+        <span className="text-slate-400">{desc}</span>
+      </div>
+    );
+  };
 
   useEffect(() => {
     const urlNames = new URLSearchParams(window.location.search)
     const code = urlNames.get('code');
+    
     if(code){
       window.history.replaceState({}, document.title, "/");
       fetch(`https://mtunes-production.up.railway.app/api/callback?code=${code}`)
@@ -68,47 +84,17 @@ function App() {
               title="MTUNES Commands"
             >
               <div className="space-y-4">
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!play [song]/!play</code>
-                  <span className="text-slate-400">Plays the song in queue</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!add [song]</code>
-                  <span className="text-slate-400">Add song to queue</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!skip</code>
-                  <span className="text-slate-400">Next track</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!stop</code>
-                  <span className="text-slate-400">Stops and Clear the queue</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!hello/!hola/!hi</code>
-                  <span className="text-slate-400">Greets the user</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!queue</code>
-                  <span className="text-slate-400">Shows how many songs are left in queue</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!leave</code>
-                  <span className="text-slate-400">Bot leaves voice channel</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!pause</code>
-                  <span className="text-slate-400">Pauses current song</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!resume</code>
-                  <span className="text-slate-400">Resumes paused song</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-800 pb-2">
-                  <code className="text-indigo-400">!ping</code>
-                  <span className="text-slate-400">Shows bot latency</span>
-                </div>
-                <p className="text-sm text-slate-500 italic">More commands coming soon...</p>
+                <CommandRow delay={100} trigger="!play [song]/!play" desc="Plays the song in queue" />
+                <CommandRow delay={200} trigger="!add [song]" desc="Add song to queue" />
+                <CommandRow delay={300} trigger="!skip" desc="Next track" />
+                <CommandRow delay={400} trigger="!stop" desc="Stops and Clear the queue" />
+                <CommandRow delay={500} trigger="!hello/!hola/!hi" desc="Greets the user" />
+                <CommandRow delay={600} trigger="!pause" desc="Greets the user" />
+                <CommandRow delay={700} trigger="!queue" desc="Shows how many songs are left in queue" />
+                <CommandRow delay={800} trigger="!leave" desc="Pauses current song" />
+                <CommandRow delay={900} trigger="!resume" desc="Resumes paused song" />
+                <CommandRow delay={1000} trigger="!ping" desc="Shows bot latency" />
+                <p className="text-sm text-slate-500 italic pt-2">More commands coming soon...</p>
               </div>
             </Modal>
           </div>

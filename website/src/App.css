@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+.command-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease-out;
+}
+
+.command-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* .counter {
   font-size: 16px;
   padding: 5px 10px;
