@@ -1,24 +1,48 @@
-This is free and unencumbered software released into the public domain.
+Non-Commercial Open Source License
 
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
+Copyright (c) 2026 Shubhankar Kumar
 
-In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, and distribute the Software for NON-COMMERCIAL PURPOSES ONLY,
+subject to the following conditions:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+1. NON-COMMERCIAL USE ONLY
+   The Software, including any modified versions, may NOT be used for commercial
+   purposes. Commercial purposes include, but are not limited to:
+   - Selling the Software or any derivative works
+   - Using the Software in a commercial product or service
+   - Using the Software to generate revenue directly or indirectly
+   - Incorporating the Software into paid applications or services
 
-For more information, please refer to <https://unlicense.org>
+2. ATTRIBUTION
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+3. DERIVATIVE WORKS
+   Any modifications or derivative works of this Software must also be distributed
+   under this same Non-Commercial License. Modified versions must clearly indicate
+   that changes were made and may not be used for commercial purposes.
+
+4. DISTRIBUTION
+   You may distribute the Software and modified versions freely, provided that:
+   - Distribution remains non-commercial
+   - This license is included with all distributions
+   - Recipients are made aware of the non-commercial restriction
+
+5. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+
+---
+
+COMMERCIAL USE INQUIRIES:
+For commercial licensing options, please contact: [Your Email/Contact]
+
+This license is designed to keep the software free and open for personal,
+educational, and non-commercial use while preventing commercial exploitation.
