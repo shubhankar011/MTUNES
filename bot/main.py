@@ -48,7 +48,11 @@ def player(ctx):
     if ctx.guild.id in qu and len(qu[ctx.guild.id]) > 0:
         video_data = qu[ctx.guild.id].pop(0)
         source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)
-        ctx.voice_client.play(source, after=lambda e: player(ctx))
+        def next_song(error):
+            if error: print(f"Player error: {error}")
+            bot.loop.call_soon_threadsafe(player, ctx)        
+        ctx.voice_client.play(source, after=next_song)
+        # bot.loop.create_task(start_speaking())
         bot.loop.create_task(ctx.send(f"Now playing: **{video_data['title']}**"))
 
     else:
@@ -76,6 +80,7 @@ async def play(ctx, *,search:str=''):
 
     if vc.is_playing():
         vc.stop()
+        await asyncio.sleep(0.5)
         await ctx.send(f"Switching...")
 
     async with ctx.typing():
@@ -83,7 +88,7 @@ async def play(ctx, *,search:str=''):
             player(ctx)
         else:
             with yt_dlp.YoutubeDL(YT_OPTS) as ydl:
-                info = ydl.extract_info(search, download=False)
+                info = await asyncio.to_thread(ydl.extract_info, search, download=False)
                 extractor = 'search' in info.get('extractor_key','').lower()
 
                 if ctx.guild.id not in qu:
@@ -136,7 +141,7 @@ async def add(ctx,*,search:str):
 
         async with ctx.typing():
             with yt_dlp.YoutubeDL(YT_OPTS) as ydl:
-                info = ydl.extract_info(search, download=False)
+                info = await asyncio.to_thread(ydl.extract_info, search, download=False)
                 extractor = 'search' in info.get('extractor_key','').lower()
                 if 'entries' in info:
                     if extractor:
