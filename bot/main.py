@@ -47,12 +47,8 @@ def player(ctx):
 
     if ctx.guild.id in qu and len(qu[ctx.guild.id]) > 0:
         video_data = qu[ctx.guild.id].pop(0)
-        source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)
-        def next_song(error):
-            if error: print(f"Player error: {error}")
-            bot.loop.call_soon_threadsafe(player, ctx)        
-        ctx.voice_client.play(source, after=next_song)
-        # bot.loop.create_task(start_speaking())
+        source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)        
+        ctx.voice_client.play(source, after=lambda e: player(ctx))
         bot.loop.create_task(ctx.send(f"Now playing: **{video_data['title']}**"))
 
     else:

@@ -5,12 +5,6 @@ import './App.css'
 
 const CLIENT_ID = '1485064494312067142';
 const SCOPES = "bot identify guilds applications.commands";
-const COMMANDS = [
-  { trigger: '/play', desc: 'Plays a song from YouTube/Spotify' },
-  { trigger: '/skip', desc: 'Skips the current track' },
-  { trigger: '/queue', desc: 'Shows the upcoming songs' },
-  { trigger: '/stop', desc: 'Clears the queue and leaves' }
-]
 
 function App() {
   const [Open, setOpen] = useState(false)
@@ -20,9 +14,18 @@ function App() {
     const discordLink = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(address)}&response_type=code&scope=${encodeURIComponent(SCOPES)}`;
     window.location.href = discordLink;
   };
+  const [serverCount, setServerCount] = useState(0);
+
+  useEffect(() => {
+    fetch('https://mtunes-production.up.railway.app/status')
+      .then(res => res.json())
+      .then(data => setServerCount(data.server))
+      .catch(err => console.log("Bot is offline"));
+  }, []);
+
   const CommandRow = ({ trigger, desc, delay }) => {
     const [show, setShow] = useState(false);
-
+    
     useEffect(() => {
       const timer = setTimeout(() => setShow(true), delay);
       return () => clearTimeout(timer);
@@ -98,9 +101,30 @@ function App() {
               </div>
             </Modal>
           </div>
+          <div className="flex justify-center gap-4 m-5">
+           <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+              <span className="block text-3xl font-bold">{serverCount}</span>
+              <span className="text-slate-500 text-sm">Active Servers</span>
+           </div>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          <FeatureCard title="Fast Search" desc="Powered by yt-dlp for near-instant results." icon="⚡" />
+          <FeatureCard title="No Lag" desc="Optimized FFmpeg streams for high-bitrate audio." icon="🎧" />
+          <FeatureCard title="Open Source" desc="Built to be transparent with no buts." icon="🛠️" />
+        </div>
         </main>
       </div>
     </>
+  )
+}
+
+function FeatureCard({title, desc, icon}){
+  return(
+    <div className="p-8 bg-slate-800/30 rounded-2xl border border-slate-700 hover:border-indigo-500 transition-all group cursor-default">
+      <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{icon}</div>
+      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <p className="text-slate-400">{desc}</p>
+    </div>
   )
 }
 

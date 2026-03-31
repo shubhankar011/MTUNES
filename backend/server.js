@@ -40,5 +40,24 @@ app.get('/api/callback', async(req,res) => {
     }
 })
 
-const PORT = 3001;
+app.get('/status', async (req, res) => {
+    try {
+        const response = await axios.get('https://discord.com/api/v10/applications/@me', {
+            headers: {
+                Authorization: `Bot ${process.env.TOKEN}`
+            }
+        });
+
+        const guildCount = response.data.approximate_guild_count || 0;
+
+        res.json({ 
+            status: "online", 
+            server: guildCount 
+        });
+    } catch (error) {
+        console.error("Discord API Error:", error);
+        res.status(500).json({ error: "Failed to fetch from Discord" });
+    }
+});
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Bridge running on port ${PORT}`));
