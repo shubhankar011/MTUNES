@@ -1,5 +1,4 @@
 const express = require('express')
-// const fs = require('fs')
 const axios = require('axios')
 const cors = require('cors')
 path = require('path')
