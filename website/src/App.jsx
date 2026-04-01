@@ -89,14 +89,15 @@ function App() {
               <div className="space-y-4">
                 <CommandRow delay={100} trigger="!play [song]/!play" desc="Plays the song in queue" />
                 <CommandRow delay={200} trigger="!add [song]" desc="Add song to queue" />
-                <CommandRow delay={300} trigger="!skip" desc="Next track" />
-                <CommandRow delay={400} trigger="!stop" desc="Stops and Clear the queue" />
-                <CommandRow delay={500} trigger="!hello/!hola/!hi" desc="Greets the user" />
-                <CommandRow delay={600} trigger="!pause" desc="Greets the user" />
-                <CommandRow delay={700} trigger="!queue" desc="Shows how many songs are left in queue" />
-                <CommandRow delay={800} trigger="!leave" desc="Pauses current song" />
-                <CommandRow delay={900} trigger="!resume" desc="Resumes paused song" />
-                <CommandRow delay={1000} trigger="!ping" desc="Shows bot latency" />
+                <CommandRow delay={300} trigger="!radio" desc="Starts Radio" />
+                <CommandRow delay={400} trigger="!skip" desc="Next track" />
+                <CommandRow delay={500} trigger="!stop" desc="Stops and Clear the queue" />
+                <CommandRow delay={600} trigger="!hello/!hola/!hi" desc="Greets the user" />
+                <CommandRow delay={700} trigger="!pause" desc="Greets the user" />
+                <CommandRow delay={800} trigger="!queue" desc="Shows how many songs are left in queue" />
+                <CommandRow delay={900} trigger="!leave" desc="Pauses current song" />
+                <CommandRow delay={1000} trigger="!resume" desc="Resumes paused song" />
+                <CommandRow delay={1100} trigger="!ping" desc="Shows bot latency" />
                 <p className="text-sm text-slate-500 italic pt-2">More commands coming soon...</p>
               </div>
             </Modal>
