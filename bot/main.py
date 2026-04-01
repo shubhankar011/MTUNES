@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 from urllib.parse import urlparse
 from flask import Flask, request
-import threading
+import threading, random
 
 load_dotenv(dotenv_path="../.env")
 TOKEN = os.getenv("TOKEN")
@@ -12,6 +12,13 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=intents)
 qu = {}
+radio_mode = {}
+RADIO_STATIONS = [
+    {"title": "Lofi Girl", "url": "https://stream.zeno.fm/0r0xa792kwzuv"},
+    {"title": "Synthwave Radio", "url": "https://stream.zeno.fm/6v30u092kwzuv"},
+    {"title": "Chillhop Beats", "url": "http://stream.zeno.fm/0r0xa792kwzuv"},
+    {"title": "FIP Radio (France) 🇫🇷", "url": "https://icecast.radiofrance.fr/fip-midfi.mp3"}
+]
 
 class Logger:
     def debug(self, msg):
@@ -44,12 +51,19 @@ def prepare_query(user_input):
     return user_input
 
 def player(ctx):
+    guild_id = ctx.guild.id
 
     if ctx.guild.id in qu and len(qu[ctx.guild.id]) > 0:
         video_data = qu[ctx.guild.id].pop(0)
         source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)        
         ctx.voice_client.play(source, after=lambda e: player(ctx))
         bot.loop.create_task(ctx.send(f"Now playing: **{video_data['title']}**"))
+
+    elif radio_mode.get(guild_id, False):
+        station = random.choice(RADIO_STATIONS)
+        source = discord.FFmpegPCMAudio(station['url'], **FFMPEG_OPTIONS)
+        ctx.voice_client.play(source, after=lambda e: player(ctx))
+        bot.loop.create_task(ctx.send(f"Radio Mode: **{station['title']}**"))        
 
     else:
         bot.loop.create_task(ctx.send("Playlist finished!"))
@@ -162,6 +176,28 @@ async def resume(ctx):
         await ctx.send("The music isn't paused.")
 
 @bot.command()
+async def radio(ctx):
+    if not ctx.author.voice:
+        return await ctx.send("You are not in a voice channel!")
+    
+    channel = ctx.author.voice.channel
+    guild_id = ctx.guild.id
+    radio_mode[guild_id] = not radio_mode.get(guild_id, False)
+
+    if ctx.voice_client is None:
+        vc = await channel.connect()
+
+    if radio_mode[guild_id]:
+        await ctx.send("**Radio Mode Enabled.** Switching to live streams..") 
+
+        if not ctx.voice_client.is_playing():
+                player(ctx)
+        else:
+            ctx.voice_client.stop()
+    else:
+        await ctx.send("**Radio Mode Disabled.** Music will stop after this track.")
+
+@bot.command()
 async def skip(ctx):
     if ctx.voice_client and ctx.voice_client.is_playing():
         ctx.voice_client.stop()
@@ -190,10 +226,6 @@ async def leave(ctx):
 @bot.command()
 async def ping(ctx: commands.Context) -> None:  
     await ctx.send(f"> Pong! {round(bot.latency * 1000)}ms")
-
-# @bot.command(name='Help')
-# async def help(ctx):
-#     await ctx.send("!Hello!hello, !hi, !holaThe bot greets you by name.\n!pingNoneShows the bot's heartbeat latency (speed).\n!play <text> Joins your VC and plays a song via search or link.!play No CapMusic \n!pause Temporarily stops the current song.\n!resume Starts the music again from where it paused. \n!stop Stops the music completely.\n!leave Force the bot to disconnect from the voice channel. \n!help for the commands")
 
 app = Flask(__name__)
 @app.get('/status')
