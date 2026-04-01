@@ -56,7 +56,7 @@ function App() {
   return (
     <>
       <div className="min-h-screen bg-[#070b11] text-slate-600 font-sans">
-        <nav className="flex items-center justify-between px-8 py-4 border-b border-slate-800 bg-[#12161F]">
+        <nav className="flex items-center justify-between px-8 py-4 border-b border-slate-800 bg-[#12161F] fixed top-0 w-full">
           <div className="flex items-center gap-3">
             <img src={mtunesLogo} className="h-10 w-10" alt="Logo" />
             <span className="text-xl font-bold tracking-tighter text-white">MTUNES</span>
@@ -66,7 +66,7 @@ function App() {
           </button>
         </nav>
 
-        <main className="max-w-4xl mx-auto pt-20 text-center">
+        <main className="max-w-4xl mx-auto pt-24 md:pt-32 text-center px-4">
           <h1 className="text-6xl font-black text-white mb-6">
             Music that <span className="text-indigo-500">grooves</span>
           </h1>
@@ -107,7 +107,7 @@ function App() {
               <span className="text-slate-500 text-sm">Active Servers</span>
            </div>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-20">
           <FeatureCard title="Fast Search" desc="Powered by yt-dlp for near-instant results." icon="⚡" />
           <FeatureCard title="No Lag" desc="Optimized FFmpeg streams for high-bitrate audio." icon="🎧" />
           <FeatureCard title="Open Source" desc="Built to be transparent with no buts." icon="🛠️" />
@@ -120,10 +120,10 @@ function App() {
 
 function FeatureCard({title, desc, icon}){
   return(
-    <div className="p-8 bg-slate-800/30 rounded-2xl border border-slate-700 hover:border-indigo-500 transition-all group cursor-default">
-      <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">{icon}</div>
+    <div className="p-6 md:p-8 bg-slate-800/30 rounded-2xl border border-slate-700 hover:border-indigo-500 transition-all group cursor-default">
+      <div className="text-3xl md:text-4xl mb-4 group-hover:scale-110 transition-transform">{icon}</div>
       <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-slate-400">{desc}</p>
+      <p className="text-slate-400 text-sm md:text-base">{desc}</p>
     </div>
   )
 }
