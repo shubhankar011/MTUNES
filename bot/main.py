@@ -14,10 +14,11 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=inten
 qu = {}
 radio_mode = {}
 RADIO_STATIONS = [
-    {"title": "Lofi Girl", "url": "https://stream.zeno.fm/0r0xa792kwzuv"},
-    {"title": "Synthwave Radio", "url": "https://stream.zeno.fm/6v30u092kwzuv"},
-    {"title": "Chillhop Beats", "url": "http://stream.zeno.fm/0r0xa792kwzuv"},
-    {"title": "FIP Radio (France) 🇫🇷", "url": "https://icecast.radiofrance.fr/fip-midfi.mp3"}
+    {"title": "BBC Radio 1 (UK) 🇬🇧", "url": "http://stream.live.vc.bbc.co.uk/bbc_radio_one_hd"},
+    {"title": "Nightride FM (Synthwave)", "url": "https://stream.nightride.fm/nightride.m4a"},
+    {"title": "Radio Paradise (Audiophile Mix)", "url": "http://stream.radioparadise.com/flac"},
+    {"title": "Monstercat 24/7", "url": "https://stream.monstercat.com/radio/station/1/"},
+    {"title": "Lofi Girl (Official)", "url": "https://icecast.lofigirl.com/lofigirl.mp3"}
 ]
 
 class Logger:
@@ -55,8 +56,11 @@ def player(ctx):
 
     if ctx.guild.id in qu and len(qu[ctx.guild.id]) > 0:
         video_data = qu[ctx.guild.id].pop(0)
-        source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)        
-        ctx.voice_client.play(source, after=lambda e: player(ctx))
+        source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)     
+        def next_song(error):
+            if error: print(f"Player error: {error}")
+            bot.loop.call_soon_threadsafe(player, ctx)
+        ctx.voice_client.play(source, after=next_song)
         bot.loop.create_task(ctx.send(f"Now playing: **{video_data['title']}**"))
 
     elif radio_mode.get(guild_id, False):
@@ -195,6 +199,9 @@ async def radio(ctx):
         else:
             ctx.voice_client.stop()
     else:
+        radio_mode[guild_id] = False
+        if ctx.voice_client and ctx.voice_client.is_playing():
+             ctx.voice_client.stop()
         await ctx.send("**Radio Mode Disabled.** Music will stop after this track.")
 
 @bot.command()
@@ -210,7 +217,8 @@ async def skip(ctx):
 async def stop(ctx):
     if ctx.guild.id in qu:
         qu[ctx.guild.id].clear()
-    
+    radio_mode[ctx.guild.id] = False
+
     if ctx.voice_client and (ctx.voice_client.is_playing() or ctx.voice_client.is_paused()):
         ctx.voice_client.stop()
         await ctx.send("Music Stopped!!!")
