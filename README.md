@@ -121,6 +121,7 @@ Frontend runs on port **5173**.
 | `!hello` / `!hi` / `!hola` | Bot greets you | `!hello` |
 | `!play <search or link>`/`!play` | Plays a song | `!play Never Gonna Give You Up` |
 | `!add <search or link>` | Adds to queue | `!add Never Gonna Give You Up` |
+| `!radio` | Starts Radio | `!radio` |
 | `!pause` | Pauses current song | `!pause` |
 | `!resume` | Resumes paused song | `!resume` |
 | `!skip` | Skips current song | `!skip` |
@@ -215,7 +216,6 @@ npm run build
 - Mixed project structure
 
 ### Planned for Next Update
-- 🎙️ **Radio feature** - Continuous music streaming
 - 🧹 **Code cleanup** - Reorganized structure
 - 📦 **Monorepo structure** - Better dependency management
 - 📝 **Better documentation**
@@ -254,7 +254,7 @@ This is free software released into the public domain. Check the LICENSE file fo
 
 **Made for playing music with friends**
 
-Version 1.0.1 | Last updated: 29-03-2026
+Version 1.0.2 | Last updated: 01-04-2026
 
 </div>
 <!-- 
