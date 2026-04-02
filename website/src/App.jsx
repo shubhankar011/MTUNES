@@ -18,7 +18,7 @@ function App() {
       .then(res => res.json())
       .then(data => {
         setServerCount(data.server);
-        setRadioActive(data.radio_active || false); // Sync radio status
+        setRadioActive(data.radio_active || false); 
       })
       .catch(err => console.log("Bot is offline"));
   }, []);
@@ -28,13 +28,6 @@ function App() {
     const discordLink = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(address)}&response_type=code&scope=${encodeURIComponent(SCOPES)}`;
     window.location.href = discordLink;
   };
-
-  useEffect(() => {
-    fetch('https://mtunes-production.up.railway.app/status')
-      .then(res => res.json())
-      .then(data => setServerCount(data.server))
-      .catch(err => console.log("Bot is offline"));
-  }, []);
 
   const CommandRow = ({ trigger, desc, delay }) => {
     const [show, setShow] = useState(false);

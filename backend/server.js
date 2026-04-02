@@ -6,12 +6,17 @@ path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const app = express()
-
+const BOT_URL = process.env.BOT_URL || 'http://localhost:5000';
 let botStats = {server_count: 0, now_playing: {}, status: "offline"}
 setInterval(async () => {
     try {
-        const response = await axios.get('http://localhost:5000/status');
-        botStats = response.data;
+        const response = await axios.get(`${BOT_URL}/status`,{
+            headers:{
+                "ngrok-skip-browser-warning": "69420"
+            }
+        });
+        botStats = response.data
+        botStats.status = online
     } catch (e) {
         botStats.status = "offline";
     }
@@ -27,7 +32,11 @@ app.get('/', (req,res) =>{
 
 app.get('/api/dashboard', async(req,res) =>{
     try {
-        const botResponse = await axios.get('http://localhost:5000/status');
+        const botResponse = await axios.get(`${BOT_URL}/status`, {
+            headers: {
+                "ngrok-skip-browser-warning": "69420" 
+            }
+        });
         res.json({
             status: "online",
             server_count: botResponse.data.server,

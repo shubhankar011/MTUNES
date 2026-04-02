@@ -67,6 +67,7 @@ def player(ctx):
 
     elif radio_mode.get(guild_id, False):
         station = random.choice(RADIO_STATIONS)
+        current_song[guild_id] = f"📻 {station['title']}"
         source = discord.FFmpegPCMAudio(station['url'], **FFMPEG_OPTIONS)
         def next_radio(error):
             if error: print(f"Player error: {error}")

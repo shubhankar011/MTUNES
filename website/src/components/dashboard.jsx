@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 export function Dashboard() {
     const [stats, setStats] = useState(null);
+    const API_BASE = import.meta.env.DEV
+        ? 'http://localhost:3001'
+        : 'https://mtunes-production.up.railway.app';
     useEffect(() => {
         const fetchStats = () => {
-            fetch('http://localhost:3001/api/dashboard')
+            fetch(`${API_BASE}/api/dashboard`)
                 .then(res => res.json())
                 .then(data => setStats(data));
         }
@@ -48,11 +51,11 @@ export function Dashboard() {
                 <h4 className="text-xl font-bold mb-4">Live Audio Feeds</h4>
                 {Object.keys(stats.now_playing).length > 0 ? (
                     Object.entries(stats.now_playing).map(([id, title]) => (
-                    <div key={id} className="flex justify-between py-2 border-b border-slate-800">
-                        <span className="text-slate-500">Server {id.slice(-4)}</span>
-                        <span className="text-indigo-400 font-medium">Playing: {title}</span>
-                    </div>
-                ))):(
+                        <div key={id} className="flex justify-between py-2 border-b border-slate-800">
+                            <span className="text-slate-500">Node {String(id).slice(-4)}</span>
+                            <span className="text-indigo-400 font-medium">Playing: {title}</span>
+                        </div>
+                    ))) : (
                     <p className="text-slate-600 italic">No active streams across the network.</p>
                 )}
             </div>
