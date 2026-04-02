@@ -7,12 +7,36 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const app = express()
 
+let botStats = {server_count: 0, now_playing: {}, status: "offline"}
+setInterval(async () => {
+    try {
+        const response = await axios.get('http://localhost:5000/status');
+        botStats = response.data;
+    } catch (e) {
+        botStats.status = "offline";
+    }
+}, 30000);
+
 app.use(cors({
     origin: ['http://localhost:5173', 'https://mtunesbot.vercel.app']
 }))
 
 app.get('/', (req,res) =>{
     res.send("MTUNES bridge is online!")
+})
+
+app.get('/api/dashboard', async(req,res) =>{
+    try {
+        const botResponse = await axios.get('http://localhost:5000/status');
+        res.json({
+            status: "online",
+            server_count: botResponse.data.server,
+            radio_active: botResponse.data.radio_active || false,
+            now_playing: botResponse.data.now_playing || {}
+        });
+    } catch (error) {
+        res.json({ status: "offline", server_count: 0, now_playing: {} });
+    }
 })
 
 app.get('/api/callback', async(req,res) => {
