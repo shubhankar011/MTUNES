@@ -12,6 +12,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'), intents=intents)
 qu = {}
+current_song = {}
 radio_mode = {}
 RADIO_STATIONS = [
     {"title": "BBC Radio 1 (UK) 🇬🇧", "url": "http://stream.live.vc.bbc.co.uk/bbc_radio_one_hd"},
@@ -56,7 +57,8 @@ def player(ctx):
 
     if ctx.guild.id in qu and len(qu[ctx.guild.id]) > 0:
         video_data = qu[ctx.guild.id].pop(0)
-        source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)     
+        source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)   
+        current_song[guild_id] = video_data['title']  
         def next_song(error):
             if error: print(f"Player error: {error}")
             bot.loop.call_soon_threadsafe(player, ctx)
@@ -66,10 +68,15 @@ def player(ctx):
     elif radio_mode.get(guild_id, False):
         station = random.choice(RADIO_STATIONS)
         source = discord.FFmpegPCMAudio(station['url'], **FFMPEG_OPTIONS)
-        ctx.voice_client.play(source, after=lambda e: player(ctx))
+        def next_radio(error):
+            if error: print(f"Player error: {error}")
+            bot.loop.call_soon_threadsafe(player, ctx)
+        ctx.voice_client.play(source, after=next_radio)
         bot.loop.create_task(ctx.send(f"Radio Mode: **{station['title']}**"))        
 
     else:
+        if guild_id in current_song:
+            del current_song[guild_id]
         bot.loop.create_task(ctx.send("Playlist finished!"))
 
 @bot.event
@@ -238,7 +245,11 @@ async def ping(ctx: commands.Context) -> None:
 app = Flask(__name__)
 @app.get('/status')
 def getStatus():
-    return {"status":"online", "server": len(bot.guilds)}
+    return {"status":"online", 
+            "server": len(bot.guilds),
+            "now_playing": current_song, 
+            "radio_active": any(radio_mode.values())
+            }
 
 def runFlask():
     app.run(host='0.0.0.0', port=5000)
