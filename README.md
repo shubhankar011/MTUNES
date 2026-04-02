@@ -16,9 +16,28 @@ MTUNES is a full-stack Discord music bot system that lets you play music from Yo
 
 ```
 MTUNES/
-├── bot/              # Discord bot (Python + discord.py)
-├── backend/          # OAuth2 bridge server (Node.js + Express)
-└── website/          # React frontend (Vite + React + Tailwind)
+├── .env                # Central secrets (Token, Client Secret)
+├── README.md
+├── LICENSE
+├── .gitignore
+├── backend/            # The Node.js Bridge (Deployed to Railway)
+│   ├── server.js
+│   └── package.json
+├── website/            # The React Frontend (Deployed to Vercel)
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   ├── App.css
+│   │   └── components/
+│   │       ├── Dashboard.jsx
+│   │       └── Modal.jsx
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+└── bot/                # The Python Music Engine (Running on Laptop)
+    ├── main.py
+    ├── requirements.txt
+    └── venv/           # Virtual environment
 ```
 
 ## Features
@@ -29,6 +48,7 @@ MTUNES/
 - Playlist support
 - Basic playback controls (play, pause, resume, stop, skip)
 - Queue management
+- Radio mode with live stream stations
 - Simple commands with `!` prefix
 
 ### Web Interface
@@ -36,9 +56,11 @@ MTUNES/
 - Discord OAuth2 integration
 - Bot invitation flow
 - Command reference modal
+- Live stats dashboard (server count, bot status, active audio feeds)
 
 ### Backend
 - OAuth2 token exchange bridge
+- Bot status & dashboard API
 - CORS-enabled API for frontend
 - Railway deployment ready
 
@@ -85,6 +107,7 @@ discord.py
 python-dotenv
 yt-dlp
 PyNaCl
+flask
 ```
 
 **Install FFmpeg separately:**
@@ -119,9 +142,9 @@ Frontend runs on port **5173**.
 | Command | Description | Example |
 |---------|-------------|---------|
 | `!hello` / `!hi` / `!hola` | Bot greets you | `!hello` |
-| `!play <search or link>`/`!play` | Plays a song | `!play Never Gonna Give You Up` |
+| `!play <search or link>`/`!play` | Plays a song or resumes queue | `!play Never Gonna Give You Up` |
 | `!add <search or link>` | Adds to queue | `!add Never Gonna Give You Up` |
-| `!radio` | Starts Radio | `!radio` |
+| `!radio` | Toggles Radio mode | `!radio` |
 | `!pause` | Pauses current song | `!pause` |
 | `!resume` | Resumes paused song | `!resume` |
 | `!skip` | Skips current song | `!skip` |
@@ -148,12 +171,18 @@ You can paste a YouTube playlist link to queue all songs:
 !play https://youtube.com/playlist?list=...
 ```
 
+### Radio Mode
+
+Type `!radio` to toggle radio mode. The bot will cycle through a curated list of live stream stations (BBC Radio 1, Nightride FM, Radio Paradise, Monstercat, and Lofi Girl). Type `!radio` again to disable it.
+
 ### Web Interface
 
 1. Visit the website
 2. Click **"Invite Bot"** button
 3. Authorize with Discord OAuth2
 4. Select your server and grant permissions
+
+You can also click **"Live Stats"** in the nav to view real-time server count, bot status, and active audio feeds across all servers.
 
 ---
 
@@ -164,7 +193,7 @@ You can paste a YouTube playlist link to queue all songs:
 - **yt-dlp** - YouTube audio extraction
 - **FFmpeg** - Audio playback
 - **PyNaCl** - Voice encryption
-- **Flask** - Bot status API (optional)
+- **Flask** - Bot status & remote control API
 
 ### Backend
 - **Express** - Web server
@@ -174,7 +203,7 @@ You can paste a YouTube playlist link to queue all songs:
 
 ### Website
 - **React 19** - UI framework
-- **Vite 8** - Build tool
+- **Vite** - Build tool
 - **Tailwind CSS v4** - Styling
 - **@tailwindcss/vite** - Tailwind integration
 
@@ -182,7 +211,7 @@ You can paste a YouTube playlist link to queue all songs:
 
 ## Deployment
 
-### Bot (Any Cloud Platform)
+### Bot (Any Cloud Platform / Local)
 ```bash
 # Make sure .env file is properly configured
 python bot/main.py
@@ -202,7 +231,7 @@ npm run build
 # Deploy the dist/ folder
 ```
 
-**Important:** Update `REDIRECT_URI` in `.env` to match your deployed backend URL.
+**Important:** Update `REDIRECT_URI` in `.env` to match your deployed frontend URL.
 
 ---
 
@@ -236,7 +265,7 @@ This is an open-source project. Feel free to:
 
 ## License
 
-This is free software released into the public domain. Check the LICENSE file for details.
+Non-commercial open source. Check the LICENSE file for details.
 
 ---
 
@@ -254,7 +283,7 @@ This is free software released into the public domain. Check the LICENSE file fo
 
 **Made for playing music with friends**
 
-Version 1.0.2 | Last updated: 01-04-2026
+Version 1.0.2 | Last updated: 02-04-2026
 
 </div>
 <!-- 
