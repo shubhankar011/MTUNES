@@ -55,8 +55,8 @@ def prepare_query(user_input):
 def player(ctx):
     guild_id = ctx.guild.id
 
-    if ctx.guild.id in qu and len(qu[ctx.guild.id]) > 0:
-        video_data = qu[ctx.guild.id].pop(0)
+    if ctx.guild.id in qu and len(qu[guild_id]) > 0:
+        video_data = qu[guild_id].pop(0)
         source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)   
         current_song[guild_id] = video_data['title']  
         def next_song(error):
