@@ -33,6 +33,7 @@ MTUNES/
 │   │       └── Modal.jsx
 │   ├── index.html
 │   ├── package.json
+│   ├── .env            # For Accessing Backend through Vite & React
 │   └── vite.config.js
 └── bot/                # The Python Music Engine (Running on Laptop)
     ├── main.py
@@ -77,7 +78,7 @@ MTUNES/
 
 ### Environment Variables
 
-Create a `.env` file in the **root directory**:
+Create a `.env` file in the **root directory** & in website directory for accessing through React:
 
 ```env
 # Discord Bot Token
@@ -87,6 +88,9 @@ TOKEN=your_discord_bot_token_here
 CLIENT_ID=your_discord_client_id
 CLIENT_SECRET=your_discord_client_secret
 REDIRECT_URI=http://localhost:5173
+
+# Backend URL, should be in website directory
+VITE_API_URL=http://localhost:3001
 ```
 
 ### Installation
@@ -239,10 +243,6 @@ npm run build
 
 ⚠️ **Note:** This version is a bit cluttered as features were added rapidly during development.
 
-### Known Issues
-- Code organization needs cleanup
-- Some redundant dependencies
-- Mixed project structure
 
 ### Planned for Next Update
 - 🧹 **Code cleanup** - Reorganized structure
@@ -271,11 +271,10 @@ Non-commercial open source. Check the LICENSE file for details.
 
 ## Notes
 
-- Bot needs proper permissions in your Discord server (Connect, Speak, Send Messages, Use Slash Commands)
+- Bot needs proper permissions in your Discord server (Connect, Speak, Send Messages)
 - Make sure FFmpeg is in your system PATH
 - Keep your bot token and OAuth secrets private (never commit `.env` to git)
 - The `.gitignore` file is configured to exclude sensitive files
-- Backend URL in `website/src/App.jsx` is currently hardcoded to Railway deployment
 
 ---
 
