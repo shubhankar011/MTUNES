@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 export function Dashboard() {
     const [stats, setStats] = useState(null);
-    const API_BASE = import.meta.env.VITE_API_URL
+    const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+    
     useEffect(() => {
         const fetchStats = () => {
             fetch(`${API_BASE}/api/dashboard`)
