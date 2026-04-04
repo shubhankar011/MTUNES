@@ -6,6 +6,7 @@ import './App.css'
 
 const CLIENT_ID = '1485064494312067142';
 const SCOPES = "bot identify guilds applications.commands";
+const BACK_URL = import.meta.env.VITE_API_URL
 
 function App() {
   const [Open, setOpen] = useState(false)
@@ -14,7 +15,7 @@ function App() {
   const [showDashboard, setShowDashboard] = useState(false);
 
   useEffect(() => {
-    fetch('https://mtunes-production.up.railway.app/status')
+    fetch(`${BACK_URL}/status`)
       .then(res => res.json())
       .then(data => {
         setServerCount(data.server);
@@ -51,7 +52,7 @@ function App() {
 
     if (code) {
       window.history.replaceState({}, document.title, "/");
-      fetch(`https://mtunes-production.up.railway.app/api/callback?code=${code}`)
+      fetch(`${BACK_URL}/api/callback?code=${code}`)
         .then(res => res.json())
         .then(data => {
           console.log("Logged in!", data);
