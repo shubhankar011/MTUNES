@@ -17,7 +17,7 @@ export function Dashboard() {
     if (!stats) {
         return (
             <>
-                <div className="text-white">Connecting to MTUNES Core...</div>
+                <div className="p-6 md:p-8 bg-slate-800/30 rounded-2xl border border-slate-700 transition-all group cursor-default">Connecting to MTUNES Core...</div>
             </>
         )
     }

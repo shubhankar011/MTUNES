@@ -129,8 +129,8 @@ function App() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-20">
                 <FeatureCard title="Fast Search" desc="Powered by yt-dlp for near-instant results." icon="⚡" />
-                <FeatureCard title="No Lag" desc="Optimized FFmpeg streams for high-bitrate audio." icon="🎧" />
-                <FeatureCard title="Open Source" desc="Built to be transparent with no buts." icon="🛠️" />
+                <FeatureCard title="No Lag" desc="Optimized FFmpeg streams for high-bitrate audio." icon="🔊" />
+                <FeatureCard title="Open Source" desc="Built to be transparent with no buts." icon="🔓" />
               </div>
             </>
           )}
