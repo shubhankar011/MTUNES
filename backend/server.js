@@ -1,11 +1,12 @@
 const express = require('express')
 const axios = require('axios')
 const cors = require('cors')
-path = require('path')
+const path = require('path')
 
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const app = express()
+const WEB_URL = process.env.REDIRECT_URI
 const BOT_URL = process.env.BOT_URL || 'http://localhost:5000';
 let botStats = {server_count: 0, now_playing: {}, status: "offline"}
 setInterval(async () => {
@@ -16,14 +17,14 @@ setInterval(async () => {
             }
         });
         botStats = response.data
-        botStats.status = online
+        botStats.status = "online"
     } catch (e) {
         botStats.status = "offline";
     }
 }, 30000);
 
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://mtunesbot.vercel.app']
+    origin: ['http://localhost:5173', `${WEB_URL}`]
 }))
 
 app.get('/', (req,res) =>{

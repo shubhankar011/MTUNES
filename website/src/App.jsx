@@ -6,7 +6,7 @@ import './App.css'
 
 const CLIENT_ID = '1485064494312067142';
 const SCOPES = "bot identify guilds applications.commands";
-const BACK_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+const BACK_URL = /*import.meta.env.VITE_API_URL||*/ 'http://localhost:3001'
 
 function App() {
   const [Open, setOpen] = useState(false)
