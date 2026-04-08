@@ -55,7 +55,7 @@ def prepare_query(user_input):
 def player(ctx):
     guild_id = ctx.guild.id
 
-    if ctx.guild.id in qu and len(qu[guild_id]) > 0:
+    if guild_id in qu and len(qu[guild_id]) > 0:
         video_data = qu[guild_id].pop(0)
         source = discord.FFmpegPCMAudio(video_data['url'], **FFMPEG_OPTIONS)   
         current_song[guild_id] = video_data['title']  
@@ -67,7 +67,7 @@ def player(ctx):
 
     elif radio_mode.get(guild_id, False):
         station = random.choice(RADIO_STATIONS)
-        current_song[guild_id] = f"📻 {station['title']}"
+        current_song[guild_id] = f"{station['title']}"
         source = discord.FFmpegPCMAudio(station['url'], **FFMPEG_OPTIONS)
         def next_radio(error):
             if error: print(f"Player error: {error}")
@@ -99,7 +99,7 @@ async def play(ctx, *,search:str=''):
         vc = await channel.connect()
     else:
         vc = ctx.voice_client
-
+    guild_id = ctx.guild.id
     if vc.is_playing():
         vc.stop()
         await asyncio.sleep(0.5)
@@ -113,22 +113,22 @@ async def play(ctx, *,search:str=''):
                 info = await asyncio.to_thread(ydl.extract_info, search, download=False)
                 extractor = 'search' in info.get('extractor_key','').lower()
 
-                if ctx.guild.id not in qu:
-                        qu[ctx.guild.id] = []
+                if guild_id not in qu:
+                        qu[guild_id] = []
                 
                 if 'entries' in info:
                     if extractor:
                         video_data = info['entries'][0]
-                        qu[ctx.guild.id].append(video_data)
+                        qu[guild_id].append(video_data)
                         await ctx.send(f"Added search result: **{video_data['title']}**")
 
                     else:
                         for entry in info['entries']:
-                            qu[ctx.guild.id].append(entry)
+                            qu[guild_id].append(entry)
                         await ctx.send(f"**{len(info['entries'])}** Songs are Added in Queue")
 
                 else:
-                    qu[ctx.guild.id].append(info)
+                    qu[guild_id].append(info)
                     await ctx.send(f"Added: **{info['title']}**")
                 
     if not vc.is_playing() and not vc.is_paused():
@@ -154,12 +154,13 @@ async def queue(ctx):
 
 @bot.command()
 async def add(ctx,*,search:str):
+    guild_id = ctx.guild.id
     channel = ctx.author.voice.channel
     if ctx.voice_client is None:
         vc = await channel.connect()
     if ctx.voice_client:
-        if ctx.guild.id not in qu:
-             qu[ctx.guild.id] = []
+        if guild_id not in qu:
+             qu[guild_id] = []
 
         async with ctx.typing():
             with yt_dlp.YoutubeDL(YT_OPTS) as ydl:
@@ -168,16 +169,16 @@ async def add(ctx,*,search:str):
                 if 'entries' in info:
                     if extractor:
                         video_data = info['entries'][0]
-                        qu[ctx.guild.id].append(video_data)
+                        qu[guild_id].append(video_data)
                         await ctx.send(f"Added search result: **{video_data['title']}** to the queue")
 
                     else:
                         for entry in info['entries']:
-                            qu[ctx.guild.id].append(entry)
+                            qu[guild_id].append(entry)
                         await ctx.send(f"**{len(info['entries'])}** Songs are Added in Queue to the queue")
 
                 else:
-                    qu[ctx.guild.id].append(info)
+                    qu[guild_id].append(info)
                     await ctx.send(f"Added: **{info['title']}** to the queue")
 @bot.command()
 async def resume(ctx):
@@ -223,9 +224,10 @@ async def skip(ctx):
 
 @bot.command()
 async def stop(ctx):
-    if ctx.guild.id in qu:
-        qu[ctx.guild.id].clear()
-    radio_mode[ctx.guild.id] = False
+    guild_id = ctx.guild.id
+    if guild_id in qu:
+        qu[guild_id].clear()
+    radio_mode[guild_id] = False
 
     if ctx.voice_client and (ctx.voice_client.is_playing() or ctx.voice_client.is_paused()):
         ctx.voice_client.stop()
