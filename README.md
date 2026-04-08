@@ -245,8 +245,6 @@ npm run build
 
 
 ### Planned for Next Update
-- 🧹 **Code cleanup** - Reorganized structure
-- 📦 **Monorepo structure** - Better dependency management
 - 📝 **Better documentation**
 
 ---
@@ -282,7 +280,7 @@ Non-commercial open source. Check the LICENSE file for details.
 
 **Made for playing music with friends**
 
-Version 1.0.2 | Last updated: 02-04-2026
+Version 1.0.3 | Last updated: 08-04-2026
 
 </div>
 <!-- 
