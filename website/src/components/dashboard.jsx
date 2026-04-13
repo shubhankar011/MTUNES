@@ -17,12 +17,12 @@ export function Dashboard() {
     if (!stats) {
         return (
             <>
-                <div className="p-6 md:p-8 bg-slate-800/30 rounded-2xl border border-slate-700 transition-all group cursor-default">Connecting to MTUNES Core...</div>
+                <div className="p-6 md:p-8 bg-slate-800/30 rounded-2xl border border-slate-700 transition-all group cursor-default mt-6">Connecting to MTUNES Core...</div>
             </>
         )
     }
     return (
-        <div className="p-8 bg-[#070b11] min-h-screen">
+        <div className="p-8 bg-[#070b11] min-h-screen mt-6">
             <h2 className="text-3xl font-bold text-white mb-8">System Oversight</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

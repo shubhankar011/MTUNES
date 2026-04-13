@@ -63,10 +63,10 @@ function App() {
   return (
     <>
       <div className="min-h-screen bg-[#070b11] text-slate-600 font-sans">
-        <nav className="flex items-center justify-between px-8 py-4 border-b border-slate-800 bg-[#12161F] fixed top-0 w-full">
+        <nav className="box flex items-center justify-between px-8 py-4 border-b border-slate-800 bg-[#12161F] fixed top-0 left-0 right-0 m-5 rounded-4xl shadow-indigo-50">
           <div className="flex items-center gap-3">
             <img src={mtunesLogo} className="h-10 w-10" alt="Logo" />
-            <span className="text-xl font-bold tracking-tighter text-white">MTUNES</span>
+            <span className="text-xl font-bold tracking-tighter text-white md:block hidden">MTUNES</span>
           </div>
           <div className="flex gap-6 items-center">
             <button
@@ -86,7 +86,7 @@ function App() {
             <Dashboard />
           ) : (
             <>
-              <h1 className="text-6xl font-black text-white mb-6">
+              <h1 className="text-6xl font-black text-white mb-6 mt-6">
                 Music that <span className="text-indigo-500">grooves</span>
               </h1>
               <p className="text-blue-900 text-lg mb-10 font-bold">
